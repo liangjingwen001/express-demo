@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var logger = require('morgan');
-let db = require('./db/connection.js')
+let db = require('./db/connection.js');
 
 // 引入路
 var indexRouter = require('./routes/index');

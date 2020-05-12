@@ -8,6 +8,7 @@ let authorSchema = new mongoose.Schema({
 let author = mongoose.model('authors', authorSchema);
 
 module.exports = author;
+
 // 插入单条记录用对象,多条记录用数组(schema没有的对戏不会插入都数据库)
 // author.insertMany([{name: '你是人间四月天1', author: '梁徽因', star: 10000}])
 // .then((res) => {

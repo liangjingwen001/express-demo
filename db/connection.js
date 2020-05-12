@@ -7,10 +7,10 @@ db.once('open', () => {
   console.log('db ok')
 });
 
-let authorSchema = new mongoose.Schema({
-	name: 'string', 
-	author: 'string',
-	});
+// let authorSchema = new mongoose.Schema({
+// 	name: 'string', 
+// 	author: 'string',
+// 	});
 	
 // let author = mongoose.model('authors', authorSchema);
 // 插入单条记录用对象,多条记录用数组(schema没有的对戏不会插入都数据库)

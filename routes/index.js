@@ -8,7 +8,11 @@ let author = require('../db/model/authorModel.js')
 // });
 
 router.get('', (req, res) => {
-	author.find()
+	// 查询star大于等于100
+	// author.find({'name': '你是人间四月天1', star: {$gte: 100}})
+	// author.find({'$or': [{'name': '你是人间四月天'}, {'name': '你是人间四月天1'}]})
+	let re = /人间/ig
+	author.find({name: {'$regex': re}})
 	.then((data) => {
 		res.send(data)
 	})
