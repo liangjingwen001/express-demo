@@ -19,6 +19,14 @@ app.use(session({
 	saveUninitialized: true
 }))
 
+// cors解决跨域
+app.use("/",(res, req, next) => {
+    req.header("Access-Control-Allow-Origin", "*");
+    req.header("Access-Control-Allow-Methods", "GET,POST,PUT");
+    req.header("Access-Control-Allow-Headers", "content-type");
+    next();  
+})
+
 // 设置模板文件夹 view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -35,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 使用路由
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
