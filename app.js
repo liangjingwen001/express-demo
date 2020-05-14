@@ -5,10 +5,12 @@ var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var logger = require('morgan');
 let db = require('./db/connection.js');
+const bodyParser = require('body-parser')
 
 // 引入路
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var newsRouter = require('./routes/news');
 
 var app = express();
 
@@ -19,11 +21,14 @@ app.use(session({
 	saveUninitialized: true
 }))
 
+// post请求默认最大传送100kb
+app.use(bodyParser.json({limit : "1000kb"}));
+
 // cors解决跨域
 app.use("/",(res, req, next) => {
-    req.header("Access-Control-Allow-Origin", "*");
-    req.header("Access-Control-Allow-Methods", "GET,POST,PUT");
-    req.header("Access-Control-Allow-Headers", "content-type");
+	req.header("Access-Control-Allow-Origin", "*");
+	req.header("Access-Control-Allow-Methods", "GET,POST,PUT");
+	req.header("Access-Control-Allow-Headers", "content-type");
     next();  
 })
 
@@ -44,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 使用路由
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/news', newsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
