@@ -4,8 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
 var logger = require('morgan');
-let db = require('./db/connection.js');
-const bodyParser = require('body-parser')
+let db = require('./db/connection.js');	//连接数据库
+const bodyParser = require('body-parser')	//设置post请求发送数据的最大值
+var cors = require('cors')	//解决跨域
+let utils = require('./utils/utils.js')
 
 // 引入路
 var indexRouter = require('./routes/index');
@@ -13,6 +15,7 @@ var usersRouter = require('./routes/users');
 var newsRouter = require('./routes/news');
 
 var app = express();
+
 
 // 设置session
 app.use(session({
@@ -24,13 +27,16 @@ app.use(session({
 // post请求默认最大传送100kb
 app.use(bodyParser.json({limit : "1000kb"}));
 
-// cors解决跨域
-app.use("/",(res, req, next) => {
-	req.header("Access-Control-Allow-Origin", "*");
-	req.header("Access-Control-Allow-Methods", "GET,POST,PUT");
-	req.header("Access-Control-Allow-Headers", "content-type");
-    next();  
-})
+// 中间件解决跨域(1)
+app.use(cors())
+
+// cors解决跨域(2)
+// app.use("/",(res, req, next) => {
+// 	req.header("Access-Control-Allow-Origin", "*");
+// 	req.header("Access-Control-Allow-Methods", "GET,POST,PUT");
+// 	req.header("Access-Control-Allow-Headers", "content-type");
+//     next();  
+// })
 
 // 设置模板文件夹 view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -49,7 +55,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 使用路由
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
-app.use('/news', newsRouter);
+app.use('/news', (req, res, next) => {
+	let {token} = req.method === 'POST' ? req.body : req.query;
+	if (token) {
+		utils.checkToken(token)
+		.then((data) => {
+			next();
+		})
+		.catch((err) => {
+			res.send(err)
+		})
+	} else {
+		res.send({code: 401, msg: '缺少token'})
+	}
+}, newsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

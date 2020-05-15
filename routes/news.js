@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let fs = require('fs');
+let news = require('../db/model/news.js')
 
 /* 上传图片接口 */
 router.post('/uploadImg', function(req, res) {
@@ -22,7 +23,7 @@ router.get('/getImg', function(req, res) {
   fs.readFile('./public/images/3.png', 'base64', (err, data) => {
 	  if (!err) {
 		  // res.set('Content-Type','image/jpeg')
-		  res.send({code: 200, data: data})
+		  res.status(200).send({code: 200, data: data})
 	  }
   })
   
@@ -39,6 +40,73 @@ router.get('/getImg', function(req, res) {
   // rs.once("open", () => {
   // 	  console.log('可写流打开')
   // })
+});
+
+/* 添加新闻接口 */
+router.post('/addNews', function(req, res) {
+  let {title, author, newsContent} = req.body;
+  if (title && author && newsContent) {
+	  news.insertMany({title, author, newsContent})
+	  .then((data) => {
+		  res.send({code: 200, msg: '新增成功'})
+	  })
+	  .catch((err) => {
+		  res.send({code: 1002, msg: '新增失败'})
+	  })
+  } else {
+	  res.send({code: 1001, msg: '缺少参数'})
+  }
+});
+
+/* 查询新闻接口 */
+router.post('/selectNews', function(req, res) {
+	news.find({})
+	.then((data) => {
+		res.send({code: 200, data: data})
+	})
+	.catch((err) => {
+		res.send({code: 1001, msg: '查询失败'})
+	})
+});
+
+/* 删除新闻接口 */
+router.post('/delNews', function(req, res) {
+	let {_id} = req.body;
+	news.remove({_id})
+	.then((data) => {
+		res.send({code: 200, msg: '删除成功'})
+	})
+	.catch((err) => {
+		res.send({code: 1001, msg: '删除失败'})
+	})
+});
+
+/* 查询新闻详情接口 */
+router.post('/newsDetail', function(req, res) {
+	let {_id} = req.body;
+	news.find({_id})
+	.then((data) => {
+		res.send({code: 200, data: data})
+	})
+	.catch((err) => {
+		res.send({code: 1001, msg: '查询失败'})
+	})
+});
+
+/* 添加新闻接口 */
+router.post('/editNews', function(req, res) {
+  let {_id, title, author, newsContent} = req.body;
+  if (title && author && newsContent) {
+	  news.update({_id}, {title, author, newsContent})
+	  .then((data) => {
+		  res.send({code: 200, msg: '编辑成功'})
+	  })
+	  .catch((err) => {
+		  res.send({code: 1002, msg: '编辑失败'})
+	  })
+  } else {
+	  res.send({code: 1001, msg: '缺少参数'})
+  }
 });
 
 module.exports = router;

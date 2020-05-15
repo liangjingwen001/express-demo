@@ -43,9 +43,9 @@ function checkToken(token) {
     return new Promise((resolve, reject) => {
         jwt.verify(token, screat, (err, data) => {
             if (err) {
-                reject({code: 1001, msg: 'token 验证失败'})
+                reject({code: 401, msg: 'token 验证失败'})
             } else if (data.createTime + expirationDate < nowTime) {
-                reject({code: 1002, msg: 'token 已过期'})
+                reject({code: 401, msg: 'token 已过期'})
             } else {
                 resolve(data)
             }
