@@ -6,8 +6,9 @@ var session = require("express-session");
 var logger = require('morgan');
 let db = require('./db/connection.js');	//连接数据库
 const bodyParser = require('body-parser')	//设置post请求发送数据的最大值
-var cors = require('cors')	//解决跨域
+let cors = require('cors')	//解决跨域
 let utils = require('./utils/utils.js')
+let fs = require('fs')
 
 // 引入路
 var indexRouter = require('./routes/index');
@@ -44,11 +45,24 @@ app.set('view engine', 'jade');
 
 // 打印日志
 app.use(logger('dev'));
+
+logger.token('requestParameters', function(req, res){
+  return JSON.stringify(req.query) || '-';
+});
+logger.token('requestBody', function(req, res){
+  return JSON.stringify(req.body) || '-';
+});
+let accessLog = fs.createWriteStream('./access.log', {flags : 'a'});
+logger.format('接口日志', '[接口日志] :method :url :status :requestParameters :requestBody :response-time ms');
+app.use(logger('接口日志', {stream : accessLog}));
+
 // 处理post请求参数
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 // 使用cookieParser中间件
 app.use(cookieParser());
+
 // 指定静态目录
 app.use(express.static(path.join(__dirname, 'public')));
 

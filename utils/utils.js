@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken') // npm i jsonwebtoken -s
 let screat = 'gjhgashdgajsk'
-let expirationDate = 1000 * 60 // 设置过期时间
+let expirationDate = 1000 * 60 * 10 // 设置过期时间
 
 // 发送验证码
 function email(mailbox, code) {

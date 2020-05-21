@@ -1,0 +1,11 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>my-vue</title><link href=/static/css/app.6499b653ae0d2027d6b467180e2fb953.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=/static/js/manifest.96fabf7d39decd466556.js></script><script type=text/javascript src=/static/js/vendor.842b8fd8f66b11e0f750.js></script><script type=text/javascript src=/static/js/app.1d8621ff4777918a01ab.js></script></body></html><script>(function gethtmlfontsize(){
+    // 三个步骤:
+    // 1.获取html的宽,
+    let htmlwidth=document.documentElement.clientWidth || document.body.clientWidth;//有些浏览器documentElement获取不到,那就使用后面的body
+    // 2.htmlDom
+    let htmlDom=document.getElementsByTagName("html")[0]
+    //3.设置根元素样式
+    htmlDom.style.fontSize=htmlwidth/20+'px';
+    // 添加监听事件(resize是监听的意思)
+    window.addEventListener('resize',gethtmlfontsize)
+})()</script>

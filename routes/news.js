@@ -19,7 +19,7 @@ router.post('/uploadImg', function(req, res) {
 });
 
 /* 下载图片接口 */
-router.get('/getImg', function(req, res) {
+router.post('/getImg', function(req, res) {
   fs.readFile('./public/images/3.png', 'base64', (err, data) => {
 	  if (!err) {
 		  // res.set('Content-Type','image/jpeg')
@@ -28,18 +28,23 @@ router.get('/getImg', function(req, res) {
   })
   
   // let imgData;
-  // let rs = fs.createReadStream('D:/workspace/test/express-demo/public/images/3.png')
+  // let rs = fs.createReadStream('D:/workspace/test/express-demo/public/images/4.png')
   // rs.on("data", (data) => {
 	 //  imgData += data;
-	 //  console.log(data)
+	 //  console.log('数据来了'+ data.length)
   // })
   // rs.once("close", () => {
-	 //  console.log('可写流关闭')
-	 //  res.send(imgData)
+	 //  console.log('可写流close')
+	 //  res.set('Content-Type','image/jpeg')
+	 //  res.status(200).send({code: 200, data: imgData})
   // })
   // rs.once("open", () => {
   // 	  console.log('可写流打开')
   // })
+  // rs.once("end", () => {
+  // 	  console.log('可写流end')
+  // })
+  
 });
 
 /* 添加新闻接口 */
