@@ -114,4 +114,10 @@ router.post('/editNews', function(req, res) {
   }
 });
 
+/* 下载文件接口 */
+router.post('/downloadFile', function(req, res) {
+	res.download("public/file/file2.xls");
+	// res.download("public/images/1.png");
+});
+
 module.exports = router;
