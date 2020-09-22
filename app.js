@@ -16,8 +16,9 @@ var app = express();
 // 设置session
 app.use(session({
 	secret: 'keyboard',
-	resave: true, 
-	saveUninitialized: true
+	resave: false, 
+	saveUninitialized: true,
+	cookie: {maxAge: 80000 }
 }))
 
 // post请求默认最大传送100kb

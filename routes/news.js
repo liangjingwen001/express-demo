@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let fs = require('fs');
+let utils = require('../utils/utils.js')
 let news = require('../db/model/news.js')
 
 /* 上传图片接口 */
@@ -47,24 +48,39 @@ router.post('/getImg', function(req, res) {
   
 });
 
-/* 添加新闻接口 */
+/* 新增编辑新闻接口 */
 router.post('/addNews', function(req, res) {
-  let {title, author, newsContent} = req.body;
-  if (title && author && newsContent) {
-	  news.insertMany({title, author, newsContent})
-	  .then((data) => {
-		  res.send({code: 200, msg: '新增成功'})
-	  })
-	  .catch((err) => {
-		  res.send({code: 1002, msg: '新增失败'})
-	  })
-  } else {
-	  res.send({code: 1001, msg: '缺少参数'})
-  }
+	let {userName} = utils.getUserInfo(req.headers.token)
+	let {title, content, _id} = req.body;
+	if (title && content) {
+		let date = new Date()
+		if (_id) {
+			// 编辑接口
+			console.log(_id)
+			news.update({_id}, {title, content, date, author: userName})
+			.then((data) => {
+				res.send({code: 200, msg: '编辑成功'})
+			})
+			.catch((err) => {
+				res.send({code: 1002, msg: '编辑失败'})
+			})
+		} else {
+			// 新增接口
+			news.insertMany({title, content, date, author: userName})
+			.then((data) => {
+				res.send({code: 200, msg: '新增成功'})
+			})
+			.catch((err) => {
+				res.send({code: 1002, msg: '新增失败'})
+			})
+		}
+	} else {
+		res.send({code: 1001, msg: '缺少参数'})
+	}
 });
 
 /* 查询新闻接口 */
-router.post('/selectNews', function(req, res) {
+router.get('/selectNews', function(req, res) {
 	news.find({})
 	.then((data) => {
 		res.send({code: 200, data: data})
@@ -77,6 +93,7 @@ router.post('/selectNews', function(req, res) {
 /* 删除新闻接口 */
 router.post('/delNews', function(req, res) {
 	let {_id} = req.body;
+	console.log(_id)
 	news.remove({_id})
 	.then((data) => {
 		res.send({code: 200, msg: '删除成功'})

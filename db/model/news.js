@@ -3,7 +3,8 @@ let mongoose = require('mongoose');
 let newsSchema = new mongoose.Schema({
 	title: 'string', 
 	author: 'string',
-	newsContent: 'string'
+	content: 'string',
+	date: 'string'
 	});
 	
 let news = mongoose.model('news', newsSchema);
