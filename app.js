@@ -21,8 +21,9 @@ var app = express();
 // 设置session
 app.use(session({
 	secret: 'keyboard',
-	resave: true, 
-	saveUninitialized: true
+	resave: false, 
+	saveUninitialized: true,
+	cookie: {maxAge: 80000 }
 }))
 
 // post请求默认最大传送100kb
@@ -70,7 +71,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/news', (req, res, next) => {
-	let {token} = req.method === 'POST' ? req.body : req.query;
+	// let {token} = req.method === 'POST' ? req.body : req.query;
+	let {token} = req.headers;
 	if (token) {
 		utils.checkToken(token)
 		.then((data) => {

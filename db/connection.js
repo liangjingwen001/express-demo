@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/dbDemo', {useNewUrlParser: true});
+mongoose.connect('mongodb://49.234.67.70:27017/newsdb', {useNewUrlParser: true});
 
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
