@@ -10,11 +10,6 @@ let cors = require('cors')	//解决跨域
 let utils = require('./utils/utils.js')
 let fs = require('fs')
 
-// 引入路
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var newsRouter = require('./routes/news');
-
 var app = express();
 
 
@@ -66,11 +61,16 @@ app.use(cookieParser());
 // 指定静态目录
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 引入路
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+var newsRouter = require('./routes/news');
 // 使用路由
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/news', (req, res, next) => {
-	let {token} = req.method === 'POST' ? req.body : req.query;
+	// let {token} = req.method === 'POST' ? req.body : req.query;
+	let {token} = req.headers;
 	if (token) {
 		utils.checkToken(token)
 		.then((data) => {

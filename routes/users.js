@@ -49,6 +49,7 @@ router.post('/getCode', (req, res) => {
 /* 登录接口 */
 router.post('/login', function(req, res, next) {
   let {userName, passWord} = req.body;
+  console.log(userName, passWord)
   if (userName && passWord) {
 	  let token = utils.createToken({userName})
 	 user.find({userName, passWord})
