@@ -1,11 +1,13 @@
-let mongoose = require('mongoose');
+let connection = require('../connection')
 
-let userSchema = new mongoose.Schema({
-	userName: 'string', 
-	passWord: 'string',
-	});
-	
-let user = mongoose.model('users', userSchema);
+var sql = 'SELECT * FROM user';
+var userList = " ";
+connection.query(sql, (err,result) => {
+    if(err){
+        console.log('[SELECT ERROR]:',err.message);
+    }
+    userList = JSON.stringify(result);
+});
 
-module.exports = user;
+module.exports = userList
 

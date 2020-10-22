@@ -32,13 +32,6 @@ app.use(bodyParser.json({limit : "1000kb"}));
 // 中间件解决跨域(1)
 app.use(cors())
 
-// cors解决跨域(2)
-// app.use("/",(res, req, next) => {
-// 	req.header("Access-Control-Allow-Origin", "*");
-// 	req.header("Access-Control-Allow-Methods", "GET,POST,PUT");
-// 	req.header("Access-Control-Allow-Headers", "content-type");
-//     next();  
-// })
 
 // 设置模板文件夹 view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -65,13 +58,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // 指定静态目录
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // 使用路由
+app.get('/', function (req, res) {
+	res.send('Hello Express')
+  })
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/news', (req, res, next) => {
-	// let {token} = req.method === 'POST' ? req.body : req.query;
 	let {token} = req.headers;
 	if (token) {
 		utils.checkToken(token)
@@ -86,18 +81,14 @@ app.use('/news', (req, res, next) => {
 	}
 }, newsRouter);
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
